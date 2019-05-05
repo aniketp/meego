@@ -191,3 +191,121 @@ func NewIfStatement(cond, cons, alt Attrib) (Statement, error) {
 
 	return &IfStatement{Condition: c, Block: cs, Alternative: a}, nil
 }
+
+// Expressions
+func NewInfixExpression(left, right, oper Attrib) (Expression, error) {
+	l, ok := left.(Expression)
+	if !ok {
+		fmt.Println(left)
+		return nil, Error("NewInfixExpression", "Expression", "left", left)
+	}
+
+	o, ok := oper.(*token.Token)
+	if !ok {
+		return nil, Error("NewInfixExpression", "*token.Token", "oper", oper)
+	}
+
+	r, ok := right.(Expression)
+	if !ok {
+		return nil, Error("NewInfixExpression", "Expression", "right", right)
+	}
+
+	return &InfixExpression{Left: l, Operator: string(o.Lit), Right: r, Token: o}, nil
+}
+
+func NewIntegerLiteral(integer Attrib) (Expression, error) {
+	intLit, ok := integer.(*token.Token)
+	if !ok {
+		return nil, Error("NewIntegerLiteral", "*token.Token", "integer", integer)
+	}
+
+	return &IntegerLiteral{Token: intLit, Value: string(intLit.Lit)}, nil
+}
+
+func NewStringLiteral(str Attrib) (Expression, error) {
+	return &StringLiteral{Value: string(str.(*token.Token).Lit), Token: str.(*token.Token)}, nil
+}
+
+func NewIdentInit(ident, expr Attrib) (Statement, error) {
+	e, ok := expr.(Expression)
+	if !ok {
+		return nil, Error("NewIdentInit", "Expression", "expr", expr)
+	}
+
+	return &InitStatement{Location: string(ident.(*token.Token).Lit), Token: ident.(*token.Token), Expr: e}, nil
+}
+
+func NewIdentExpression(ident Attrib) (*Identifier, error) {
+	return &Identifier{Value: string(ident.(*token.Token).Lit), Token: ident.(*token.Token)}, nil
+}
+
+func NewBoolExpression(val Attrib) (Expression, error) {
+	return &Boolean{Value: val.(bool)}, nil
+}
+
+func NewReturnStatement(exp Attrib) (Statement, error) {
+	e, ok := exp.(Expression)
+	if !ok {
+		return nil, Error("NewReturnExpression", "Expression", "exp", exp)
+	}
+	return &ReturnStatement{ReturnValue: e}, nil
+}
+
+func NewFunctionCall(name, args Attrib) (Expression, error) {
+	n, ok := name.(*token.Token)
+	if !ok {
+		return nil, fmt.Errorf("invalid type of name. got=%T", name)
+	}
+
+	a := []Expression{}
+	if args != nil {
+		var ok bool
+		a, ok = args.([]Expression)
+		if !ok {
+			return nil, Error("NewFunctionCall", "[]Expression", "args", args)
+		}
+	}
+
+	return &FunctionCall{Name: string(n.Lit), Args: a, Token: n}, nil
+}
+
+func NewFormalArg() ([]FormalArg, error) {
+	return []FormalArg{}, nil
+}
+
+func AppendFormalArgs(args, arg, kind Attrib) ([]FormalArg, error) {
+	as, ok := args.([]FormalArg)
+	if !ok {
+		return nil, Error("AppendFormalArgs", "[]FormalArg", "args", args)
+	}
+
+	a, ok := arg.(*token.Token)
+	if !ok {
+		return nil, Error("AppendFormalArgs", "*token.Token", "arg", arg)
+	}
+
+	k, ok := kind.(*token.Token)
+	if !ok {
+		return nil, fmt.Errorf("invalid type of kind. got=%T", kind)
+	}
+
+	return append(as, FormalArg{string(a.Lit), string(k.Lit)}), nil
+}
+
+func NewArg() ([]Expression, error) {
+	return []Expression{}, nil
+}
+
+func AppendArgs(expr, args Attrib) ([]Expression, error) {
+	as, ok := args.([]Expression)
+	if !ok {
+		return nil, Error("AppendFormalArgs", "[]FormalArgs", "args", args)
+	}
+
+	e, ok := expr.(Expression)
+	if !ok {
+		return nil, Error("AppendFormalArgs", "Expression", "expr", expr)
+	}
+
+	return append(as, e), nil
+}

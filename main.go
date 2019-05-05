@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/aniketp/go-compiler/ast"
-	"github.com/aniketp/go-compiler/lexer"
-	"github.com/aniketp/go-compiler/parser"
+	"github.com/aniketp/meego/ast"
+	"github.com/aniketp/meego/lexer"
+	"github.com/aniketp/meego/parser"
 )
 
 func check(err error) {

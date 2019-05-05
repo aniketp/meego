@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/aniketp/go-compiler/token"
+import "github.com/aniketp/meego/token"
 
 type Attrib interface{}
 

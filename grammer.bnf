@@ -48,7 +48,7 @@ semicolon : ';' ;
 
 <<
 import (
-	"github.com/aniketp/go-compiler/ast"
+	"github.com/aniketp/meego/ast"
 )
 >>
 

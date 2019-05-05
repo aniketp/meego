@@ -3,7 +3,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/aniketp/go-compiler/token"
+	"github.com/aniketp/meego/token"
 )
 
 // Interface methods

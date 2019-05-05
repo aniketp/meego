@@ -3,8 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/aniketp/go-compiler/lexer"
-	"github.com/aniketp/go-compiler/token"
+	"github.com/aniketp/meego/lexer"
+	"github.com/aniketp/meego/token"
 )
 
 func TestToken(t *testing.T) {

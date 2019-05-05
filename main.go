@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aniketp/go-compiler/ast"
 	"github.com/aniketp/go-compiler/lexer"
 	"github.com/aniketp/go-compiler/parser"
 )
@@ -15,12 +16,14 @@ func check(err error) {
 	}
 }
 
-func Parse(input string) {
+func Parse(input string) *ast.Program {
 	l := lexer.NewLexer([]byte(input))
 	p := parser.NewParser()
 
-	_, err := p.Parse(l)
+	node, err := p.Parse(l)
 	check(err)
+	program, _ := node.(*ast.Program)
+	return program
 }
 
 func main() {

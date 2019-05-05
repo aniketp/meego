@@ -13,6 +13,6 @@ test:
 
 clean:
 	$(GOCLEAN)
-	rm -rf util token lexer
+	rm -rf util token lexer parser errors
 run:
 	$(GENERATE) $(GENERATOR) # create lexer and parser

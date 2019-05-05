@@ -14,11 +14,13 @@ int : '0' | '1'-'9' {_digit} ;
 func : 'f' 'u' 'n' 'c' ;
 let : 'l' 'e' 't' ;
 if : 'i' 'f' ;
+elif : 'e' 'l' 'i' 'f' ;
 else : 'e' 'l' 's' 'e' ;
 return : 'r' 'e' 't' 'u' 'r' 'n' ;
 true : 't' 'r' 'u' 'e' ;
 false : 'f' 'a' 'l' 's' 'e' ;
 and : 'a' 'n' 'd' ;
+for : 'f' 'o' 'r' ;
 or : 'o' 'r' ;
 
 ident : _letter {_alpha} ;
@@ -27,8 +29,10 @@ ident : _letter {_alpha} ;
 plus : '+' ;
 minus : '-' ;
 mul : '*' ;
+div : '/' ;
 
 eq : '=' '=' ;
+neq : '!' '=' ;
 lt : '<' ;
 gt : '>' ;
 
@@ -39,8 +43,8 @@ lparen : '(' ;
 rparen : ')' ;
 comma : ',' ;
 semicolon : ';' ;
-period : '.' ;
-colon : ':' ;
+// period : '.' ;
+// colon : ':' ;
 
 
 /* Syntactic Parser */
@@ -60,11 +64,12 @@ Statements
 
 Function
 	: func ident lparen FormalArgs rparen ident StatementBlock
+	;
 
 Statement
 	: if Expression StatementBlock IfStatement
 	| for Expression StatementBlock
-	| let ident assign kind Expression semicolon
+	| let ident assign Expression semicolon
 	| Expression semicolon
 	| return semicolon
 	| return Expression semicolon
@@ -115,6 +120,7 @@ Factor
 Bool
 	: true
 	| false
+	;
 
 Args
 	: Expression ArgsList

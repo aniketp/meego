@@ -41,3 +41,97 @@ comma : ',' ;
 semicolon : ';' ;
 period : '.' ;
 colon : ':' ;
+
+
+/* Syntactic Parser */
+Program
+	: Functions Statements
+	;
+
+Functions
+	: Functions Function
+	| empty
+	;
+
+Statements
+	: Statements Statement
+	| empty
+	;
+
+Function
+	: func ident lparen FormalArgs rparen ident StatementBlock
+
+Statement
+	: if Expression StatementBlock IfStatement
+	| for Expression StatementBlock
+	| let ident assign kind Expression semicolon
+	| Expression semicolon
+	| return semicolon
+	| return Expression semicolon
+	;
+
+IfStatement
+	: elif Expression StatementBlock IfStatement
+	| else StatementBlock
+	| empty
+	;
+
+StatementBlock
+	: lbrace Statement rbrace
+	;
+
+Expression
+	: Expression Operation Term
+	| Term
+	;
+
+Operation
+	: plus
+	| minus
+	| lt
+	| gt
+	| eq
+	| neq
+	| and
+	| or
+	;
+
+Term
+	: Term mul Factor
+	| Term div Factor
+	| string_literal
+	| Bool
+	| Factor
+	;
+
+Factor
+	: lparen Expression rparen
+	| int
+	| ident
+	| ident lparen Args rparen
+	| error
+	;
+
+Bool
+	: true
+	| false
+
+Args
+	: Expression ArgsList
+	| empty
+	;
+
+ArgsList
+	: ArgsList comma Expression
+	| empty
+	;
+
+FormalArgs
+	: ident ident FormalArgsList
+	| empty
+	;
+
+FormalArgsList
+	: FormalArgsList comma ident ident
+	| empty
+	;

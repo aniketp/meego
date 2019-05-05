@@ -90,7 +90,7 @@ StatementBlock
 	;
 
 Expression
-	: Expression Operation Term
+	: Expression Operation Term << ast.NewInfixExpression($0, $2, $1) >>
 	| Term
 	;
 
@@ -106,42 +106,42 @@ Operation
 	;
 
 Term
-	: Term mul Factor
-	| Term div Factor
-	| string_literal
-	| Bool
+	: Term mul Factor << ast.NewInfixExpression($0, $2, $1) >>
+	| Term div Factor << ast.NewInfixExpression($0, $2, $1) >>
+	| string_literal << ast.NewStringLiteral($0) >>
+	| Bool			<< ast.NewBoolExpression($0) >>
 	| Factor
 	;
 
 Factor
-	: lparen Expression rparen
-	| int
-	| ident
-	| ident lparen Args rparen
+	: lparen Expression rparen << $1, nil >>
+	| int		<< ast.NewIntegerLiteral($0) >>
+	| ident		<< ast.NewIdentExpression($0) >>
+	| ident lparen Args rparen << ast.NewFunctionCall($0, $2) >>
 	| error
 	;
 
 Bool
-	: true
-	| false
+	: true		<< true, nil >>
+	| false		<< false, nil >>
 	;
 
 Args
-	: Expression ArgsList
+	: Expression ArgsList  << ast.AppendArgs($0, $1) >>
 	| empty
 	;
 
 ArgsList
-	: ArgsList comma Expression
+	: ArgsList comma Expression  << ast.AppendArgs($2, $0) >>
 	| empty
 	;
 
 FormalArgs
-	: ident ident FormalArgsList
+	: ident ident FormalArgsList  << ast.AppendFormalArgs($2, $0, $1) >>
 	| empty
 	;
 
 FormalArgsList
-	: FormalArgsList comma ident ident
-	| empty
+	: FormalArgsList comma ident ident  << ast.AppendFormalArgs($0, $2, $3) >>
+	| empty		<< ast.NewFormalArg() >>
 	;

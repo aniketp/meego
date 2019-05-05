@@ -5,7 +5,8 @@ import "github.com/aniketp/go-compiler/token"
 type Attrib interface{}
 
 type Program struct {
-	Statements []Statement
+	Statements []Statement `json:"statements"`
+	Functions  []Statement `json:"functions"`
 }
 
 type Node interface {
@@ -14,7 +15,7 @@ type Node interface {
 
 type Statement interface {
 	Node
-	StatementNode()
+	statementNode()
 }
 
 type Expression interface {
@@ -30,7 +31,7 @@ type AssignStatement struct {
 }
 
 type FunctionStatement struct {
-	token      *token.Token    `json:"-"`
+	Token      *token.Token    `json:"-"`
 	Name       string          `json:"name"`
 	Parameters []FormalArg     `json:"params"`
 	Body       *BlockStatement `json:"body"`
@@ -74,4 +75,40 @@ type InitStatement struct {
 	Token    *token.Token `json:"-"`
 	Expr     Expression   `json:"expression"`
 	Location string       `json:"location"`
+}
+
+// Expression structures
+type Identifier struct {
+	Token *token.Token `json:"-"`
+	Value string       `json:"value"`
+}
+
+type Boolean struct {
+	Token *token.Token `json:"-"`
+	Value bool         `json:"value"`
+}
+
+type IntegerLiteral struct {
+	Token *token.Token `json:"-"`
+	Value string       `json:"value"`
+}
+
+type StringLiteral struct {
+	Token *token.Token `json:"-"`
+	Value string       `json:"value"`
+}
+
+type InfixExpression struct {
+	Token    *token.Token `json:"-"`
+	Type     string       `json:"-"`
+	Left     Expression   `json:"left"`
+	Right    Expression   `json:"right"`
+	Operator string       `json:"operator"`
+}
+
+type FunctionCall struct {
+	Token *token.Token `json:"-"`
+	Name  string       `json:"name"`
+	Args  []Expression `json:"args"`
+	Type  string       `json:"type"`
 }

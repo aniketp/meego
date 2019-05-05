@@ -47,6 +47,43 @@ func (fs FunctionStatement) TokenLiteral() string {
 	return "FunctionStatement"
 }
 
+// Expressions (and TokenLiterals)
+func (i Identifier) expressionNode() {}
+func (i Identifier) TokenLiteral() string {
+	return string(i.Token.Lit)
+}
+
+func (sl StringLiteral) expressionNode() {}
+func (sl StringLiteral) TokenLiteral() string {
+	return string(sl.Token.Lit)
+}
+
+func (b Boolean) expressionNode() {}
+func (b Boolean) TokenLiteral() string {
+	return string(b.Token.Lit)
+}
+
+func (il IntegerLiteral) expressionNode() {}
+func (il IntegerLiteral) TokenLiteral() string {
+	return string(il.Token.Lit)
+}
+
+func (oe InfixExpression) expressionNode() {}
+func (oe InfixExpression) TokenLiteral() string {
+	return string(oe.Token.Lit)
+}
+
+func (fc FunctionCall) expressionNode() {}
+func (fc FunctionCall) TokenLiteral() string {
+	return string(fc.Token.Lit)
+}
+
+////-------------------------------------------
+
+func Error(fun, expected, v string, got interface{}) error {
+	return fmt.Errorf("AST construction error: In function: %s, expected %s for %s. got=%T", fun, expected, v, got)
+}
+
 // AST Constructors
 func NewProgram(funcs, stmts Attrib) (*Program, error) {
 	s, ok := stmts.([]Statement)
@@ -81,7 +118,7 @@ func NewAssignStatement(left, right Attrib) (Statement, error) {
 		return nil, Error("NewAssignStatement", "Identifier", "left", left)
 	}
 
-	r, ok := right.(*token.Token)
+	r, ok := right.(Expression)
 	if !ok {
 		return nil, Error("NewAssignStatement", "Expression", "right", right)
 	}

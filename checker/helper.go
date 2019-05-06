@@ -2,15 +2,16 @@ package checker
 
 // Normalized operations
 const (
-	PLUS  = "PLUS"
-	EQUAL = "EQ"
-	LT    = "LT"
-	GT    = "GT"
-	MINUS = "MINUS"
-	TIMES = "TIMES"
-	AND   = "AND"
-	OR    = "OR"
-	PRINT = "PRINT"
+	PLUS   = "PLUS"
+	EQUAL  = "EQ"
+	LT     = "LT"
+	GT     = "GT"
+	MINUS  = "MINUS"
+	TIMES  = "TIMES"
+	DIVIDE = "DIVIDE"
+	AND    = "AND"
+	OR     = "OR"
+	PRINT  = "PRINT"
 )
 
 // Variable types

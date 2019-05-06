@@ -2,6 +2,7 @@ package checker
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 
 	"github.com/aniketp/meego/ast"
@@ -198,4 +199,69 @@ func evalFunctionCall(node *ast.FunctionCall) (string, error) {
 	}
 
 	return sig.Return, nil
+}
+
+func evalIdentifier(node *ast.Identifier) (string, error) {
+	kind, _ := env.Get(node.Value)
+	return kind, nil
+}
+
+// Trivial
+func evalBoolean(node *ast.Boolean) (string, error) {
+	return BOOL_TYPE, nil
+}
+
+func evalInteger(node *ast.IntegerLiteral) (string, error) {
+	return INT_TYPE, nil
+}
+
+func evalString(node *ast.StringLiteral) (string, error) {
+	return STRING_TYPE, nil
+}
+
+// Evaluate the provided expression in infix form
+func evalInfixExpression(node *ast.InfixExpression) (string, error) {
+	left, err := checker(node.Left)
+	if err != nil {
+		return left, err
+	}
+
+	right, err := checker(node.Right)
+	if err != nil {
+		return right, err
+	}
+
+	if left != right {
+		return "", errors.New("Incorrect types for operation")
+	}
+
+	// Type setting for code generation
+	node.Type = left // (or right)
+
+	// Construct a map for all allowed methods
+	methods := map[string]string{
+		"+":   PLUS,
+		"-":   MINUS,
+		"==":  EQUAL,
+		"<":   LT,
+		">":   GT,
+		"*":   TIMES,
+		"/":   DIVIDE,
+		"or":  OR,
+		"and": AND,
+	}
+
+	if !MethodExist(right, methods[node.Operator]) {
+		return NOTHING_TYPE, errors.New(fmt.Sprintf("Method %s does not exist for type %s",
+			methods[node.Operator], left))
+	}
+
+	// Locate the node's operator and if found, return BOOL_TYPE
+	for _, opr := range []string{"<=", "<", ">=", ">", "or", "and"} {
+		if node.Operator == opr {
+			return BOOL_TYPE, nil
+		}
+	}
+
+	return left, nil
 }

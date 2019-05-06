@@ -134,10 +134,10 @@ func evalAssignStatement(node *ast.AssignStatement) (string, error) {
 
 	if kind, ok := env.Get(node.Left.Value); ok {
 		if kind != right {
-			return "", errors.New("invalid type assignment")
+			return "", errors.New("Invalid type assignment")
 		}
 	} else {
-		return "", errors.New("ident not exist")
+		return "", errors.New("Identifier does not exist")
 	}
 	return "", nil
 }
@@ -155,9 +155,47 @@ func evalFunctionStatement(node *ast.FunctionStatement) (string, error) {
 	}
 	// check if correct return type
 	if res != node.Return {
-		return "", errors.New("incorrect return type")
+		return "", errors.New("Incorrect return type")
 	}
 
 	SetFunctionSignature(node.Name, Signature{node.Return, params})
 	return "", nil
+}
+
+// Expressions
+func evalFunctionCall(node *ast.FunctionCall) (string, error) {
+	// print() function call
+	if IsBuiltin(node.Name) {
+		res, err := checker(node.Args[0])
+		if err != nil {
+			return "", err
+		}
+
+		node.Type = res
+		return NOTHING_TYPE, nil
+	}
+
+	var sig Signature
+	// Check if the function called is a valid one
+	if sig, ok := GetFunctionSignature(node.Name); !ok {
+		return "", errors.New("Function signature does not exist")
+	}
+
+	if len(node.Args) != len(sig.Params) {
+		return "", errors.New("Incorrect number of function arguments")
+	}
+
+	// Validate parameters
+	for i, arg := range node.Args {
+		res, err := checker(arg)
+		if err != nil {
+			return "", errors.New(err.Error())
+		}
+
+		if res != sig.Params[i] {
+			return "", errors.New("Invalid argument type")
+		}
+	}
+
+	return sig.Return, nil
 }

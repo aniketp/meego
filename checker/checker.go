@@ -177,8 +177,9 @@ func evalFunctionCall(node *ast.FunctionCall) (string, error) {
 	}
 
 	var sig Signature
+	var ok bool
 	// Check if the function called is a valid one
-	if sig, ok := GetFunctionSignature(node.Name); !ok {
+	if sig, ok = GetFunctionSignature(node.Name); !ok {
 		return "", errors.New("Function signature does not exist")
 	}
 

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/aniketp/meego/ast"
+	"github.com/aniketp/meego/checker"
 	"github.com/aniketp/meego/lexer"
 	"github.com/aniketp/meego/parser"
 )
@@ -26,6 +27,11 @@ func Parse(input string) *ast.Program {
 	return program
 }
 
+func TypeCheck(program *ast.Program) {
+	err := checker.Checker(program)
+	check(err)
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		panic("Provide a valid file name")
@@ -36,5 +42,6 @@ func main() {
 	input, err := ioutil.ReadFile(absPath)
 	check(err)
 
-	Parse(string(input))
+	program := Parse(string(input))
+	TypeCheck(program)
 }

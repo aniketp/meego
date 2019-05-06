@@ -65,7 +65,8 @@ func IsBuiltin(name string) bool {
 }
 
 func NewEnvironment() Environment {
-	return Environment{Vals: map[string]string{}, Funcs: map[string]Signature{}, Types: map[string]bool{}}
+	return Environment{Vals: map[string]string{},
+		Funcs: map[string]Signature{}, Types: map[string]bool{}}
 }
 
 // Check if the method in the typetable exists

@@ -109,3 +109,35 @@ func genReturnStatement(node *ast.ReturnStatement, b *bytes.Buffer) string {
 }
 
 // Generate function body
+func genFunctionStatement(node *ast.FunctionStatement, b *bytes.Buffer) string {
+	if checker.IsBuiltin(node.Name) {
+		panic("Already a builtin function")
+	}
+
+	write(b, "%s %s(", node.Return, node.Name)
+
+	// Generate all the arguments
+	for i, arg := range node.Parameters {
+		write(b, "%s %s", arg.Type, arg.Arg)
+		// Check if it's the last argument
+		if i != len(node.Parameters)-1 {
+			write(b, ",") // Write a comma
+		}
+	}
+
+	// Generate function body
+	write(b, ") {\n")
+	codeGen(node.Body, b)
+	write(b, "}\n\n")
+	return ""
+}
+
+func genIfStatement(node *ast.IfStatement, b *bytes.Buffer) string {
+	cond := codeGen(node.Condition, b)
+	write(b, "if (\"true\" == %s.val) {\n", cond)
+	codeGen(node.Block, b)
+	write(b, "} else {\n")
+	codeGen(node.Alternative, b)
+	write(b, "}\n\n")
+	return ""
+}

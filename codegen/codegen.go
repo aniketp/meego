@@ -83,7 +83,7 @@ func genBlockStatement(node *ast.BlockStatement, b *bytes.Buffer) string {
 	return ""
 }
 
-func genExpressionStatement(node *ast.BlockStatement, b *bytes.Buffer) string {
+func genExpressionStatement(node *ast.ExpressionStatement, b *bytes.Buffer) string {
 	expr := codeGen(node.Expression, b)
 	write(b, "%s;\n", expr)
 	return ""

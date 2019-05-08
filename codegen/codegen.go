@@ -2,6 +2,7 @@ package codegen
 
 import (
 	"bytes"
+	"strings"
 
 	"github.com/aniketp/meego/ast"
 	"github.com/aniketp/meego/checker"
@@ -140,4 +141,35 @@ func genIfStatement(node *ast.IfStatement, b *bytes.Buffer) string {
 	codeGen(node.Alternative, b)
 	write(b, "}\n\n")
 	return ""
+}
+
+// Generate integers, strings and booleans
+func genInteger(node *ast.IntegerLiteral, b *bytes.Buffer) string {
+	tmpVar := freshTemp()
+	write(b, "Int %s = Int(%s);\n", tmpVar, string(node.Token.Lit))
+	return tmpVar
+}
+
+func genString(node *ast.IntegerLiteral, b *bytes.Buffer) string {
+	tmpVar := freshTemp()
+	str := string(node.Token.Lit)
+	str = strings.Replace(str, `\`, "\\", -1)
+
+	// Write the sanitized buffer (Type casted to string class)
+	write(b, "String %s = String(%s);\n", tmpVar, str)
+	return tmpVar
+}
+
+func genBoolean(node *ast.Boolean, b *bytes.Buffer) string {
+	// Node can be either of the boolean values
+	if node.Value {
+		return "Bool(\"true\")"
+	} else {
+		return "Bool(\"false\")"
+	}
+	return ""
+}
+
+func genIdentifier(node *ast.Identifier, b *bytes.Buffer) string {
+	return node.Value
 }

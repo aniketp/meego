@@ -173,3 +173,50 @@ func genBoolean(node *ast.Boolean, b *bytes.Buffer) string {
 func genIdentifier(node *ast.Identifier, b *bytes.Buffer) string {
 	return node.Value
 }
+
+// Evaluate function call and infix expression
+func genInfixExpression(node *ast.InfixExpression, b *bytes.Buffer) string {
+	left := codeGen(node.Left, b)
+	right := codeGen(node.Right, b)
+	kind := node.Type
+
+	tmp := freshTemp()
+	methods := map[string]string{"+": PLUS, "-": MINUS, "==": EQUAL,
+		"<": LT, ">": GT, "*": TIMES, "/": DIVIDE, "or": OR, "and": AND}
+
+	method, _ := GetMethod(kind, methods[node.Operator])
+	write(b, "%s %s = %s.%s(%s);\n", method.Return, tmp, left, methods[node.Operator], right)
+	return tmp
+}
+
+func genFunctionCall(node *ast.FunctionCall, b *bytes.Buffer) string {
+	var sig Signature
+	args := make([]string, len(node.Args))
+	// store expression tmp vars
+	for i, arg := range node.Args {
+		res := gen(arg, b)
+		args[i] = res
+	}
+
+	tmp := freshTemp()
+	if IsBuiltin(node.Name) {
+		sig, ok := GetMethod(node.Type, node.Name)
+		if !ok {
+			panic("no builtin function")
+		}
+
+		write(b, "%s %s = %s.%s(", sig.Return, tmp, args[0], node.Name)
+	} else {
+		sig, _ = GetFunctionSignature(node.Name)
+		write(b, "%s %s = %s(", sig.Return, tmp, node.Name)
+		for i, arg := range args {
+			write(b, arg)
+			if i != len(args)-1 {
+				write(b, ",")
+			}
+		}
+	}
+
+	write(b, ");")
+	return tmp
+}

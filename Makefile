@@ -8,7 +8,9 @@ GENERATE=../../../../../bin/gocc
 all: test run
 
 test: run
-	$(GOTEST) -v 
+	cd test; \
+	$(GOTEST) -v
+	cd ..;	
 
 clean:
 	rm -rf src/util src/token src/lexer src/parser src/errors

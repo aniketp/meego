@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"strings"
@@ -54,7 +54,7 @@ func TestGen(t *testing.T) {
 				PRINT(z);
 				`,
 			res: `
-				include <iostream>
+				#include <iostream>
 				#include <string>
 				#include "Builtins.cpp"
 				int main() {

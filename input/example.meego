@@ -1,0 +1,12 @@
+func add(a Int, b Int) Int {
+    return a + b;
+}
+
+func hello(name String) String {
+    return "hello" + " " + name;
+}
+
+let num = add(1, 2);
+let phrase = hello("Jeff");
+PRINT(phrase);
+PRINT(num);

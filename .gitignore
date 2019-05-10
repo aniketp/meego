@@ -1,6 +1,13 @@
+# We have gocc for these
 lexer/
 parser/
 errors/
 util/
 token/
+
+# Fuck VSCode
 .vscode/
+
+# Generated Binary and source
+apple
+template/main.cpp

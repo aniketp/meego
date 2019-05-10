@@ -58,7 +58,7 @@ func codeGen(node ast.Node, b *bytes.Buffer) string {
 // Generate main program
 func genProgram(node *ast.Program, b *bytes.Buffer) string {
 	write(b,
-		"#include <iostream>\n#include <string>\ninclude \"Builtins.cpp\"\n\n")
+		"#include <iostream>\n#include <string>\n#include \"Builtins.cpp\"\n\n")
 
 	// We'll generate all functions before main, to ensure function
 	// declaration before invocation
@@ -72,7 +72,7 @@ func genProgram(node *ast.Program, b *bytes.Buffer) string {
 	}
 
 	// Here, we're done with the main function
-	write(b, "return 0;\n")
+	write(b, "return 0;\n}")
 	return ""
 }
 
@@ -150,7 +150,7 @@ func genInteger(node *ast.IntegerLiteral, b *bytes.Buffer) string {
 	return tmpVar
 }
 
-func genString(node *ast.IntegerLiteral, b *bytes.Buffer) string {
+func genString(node *ast.StringLiteral, b *bytes.Buffer) string {
 	tmpVar := freshTemp()
 	str := string(node.Token.Lit)
 	str = strings.Replace(str, `\`, "\\", -1)
@@ -167,7 +167,6 @@ func genBoolean(node *ast.Boolean, b *bytes.Buffer) string {
 	} else {
 		return "Bool(\"false\")"
 	}
-	return ""
 }
 
 func genIdentifier(node *ast.Identifier, b *bytes.Buffer) string {

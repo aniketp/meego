@@ -3,10 +3,10 @@ package main
 import (
 	"testing"
 
-	"github.com/aniketp/meego/ast"
-	"github.com/aniketp/meego/checker"
-	"github.com/aniketp/meego/lexer"
-	"github.com/aniketp/meego/parser"
+	"github.com/aniketp/meego/src/ast"
+	"github.com/aniketp/meego/src/checker"
+	"github.com/aniketp/meego/src/lexer"
+	"github.com/aniketp/meego/src/parser"
 )
 
 type Test struct {

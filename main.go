@@ -8,11 +8,11 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/aniketp/meego/ast"
-	"github.com/aniketp/meego/checker"
-	"github.com/aniketp/meego/codegen"
-	"github.com/aniketp/meego/lexer"
-	"github.com/aniketp/meego/parser"
+	"github.com/aniketp/meego/src/ast"
+	"github.com/aniketp/meego/src/checker"
+	"github.com/aniketp/meego/src/codegen"
+	"github.com/aniketp/meego/src/lexer"
+	"github.com/aniketp/meego/src/parser"
 )
 
 func check(err error) {
@@ -44,7 +44,7 @@ func Compile(code bytes.Buffer) string {
 	f.Write(code.Bytes())
 
 	var out bytes.Buffer
-	cmd1 := exec.Command("g++", "-o", "apple", "./template/main.cpp",
+	cmd1 := exec.Command("g++", "-std=c++11", "-o", "apple", "./template/main.cpp",
 		"./template/Builtins.cpp")
 	cmd1.Stderr = &out
 	err = cmd1.Run()

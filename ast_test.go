@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/aniketp/go-compiler/ast"
+	"github.com/aniketp/meego/src/ast"
 )
 
 func TestAST(t *testing.T) {

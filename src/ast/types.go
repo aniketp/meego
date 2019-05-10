@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/aniketp/meego/token"
+import "github.com/aniketp/meego/src/token"
 
 type Attrib interface{}
 

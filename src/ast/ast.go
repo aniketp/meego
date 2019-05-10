@@ -3,7 +3,7 @@ package ast
 import (
 	"fmt"
 
-	"github.com/aniketp/meego/token"
+	"github.com/aniketp/meego/src/token"
 )
 
 // Interface methods

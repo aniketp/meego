@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/aniketp/meego/ast"
+	"github.com/aniketp/meego/src/ast"
 )
 
 //  Driver Type-Checker function

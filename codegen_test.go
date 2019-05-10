@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Lebonesco/go-compiler/gen"
+	"github.com/aniketp/meego/src/codegen"
 )
 
 func TestGen(t *testing.T) {
@@ -15,16 +15,16 @@ func TestGen(t *testing.T) {
 		{
 			src: ``,
 			res: `
-				#include <string>
 				#include <iostream>
+				#include <string>
 				#include "Builtins.cpp"
 				int main() { return 0; }
 				`},
 		{
 			src: `5 + 5;`,
 			res: `
-			#include <string>
 			#include <iostream>
+			#include <string>
 			#include "Builtins.cpp"
 			int main() {
 			Int tmp_1 = Int(5);
@@ -36,8 +36,8 @@ func TestGen(t *testing.T) {
 		{
 			src: `10 < 4;`,
 			res: `
-			#include <string>
 			#include <iostream>
+			#include <string>
 			#include "Builtins.cpp"
 			int main() {
 			Int tmp_1 = Int(10);
@@ -54,8 +54,8 @@ func TestGen(t *testing.T) {
 				PRINT(z);
 				`,
 			res: `
+				include <iostream>
 				#include <string>
-				#include <iostream>
 				#include "Builtins.cpp"
 				int main() {
 				String tmp_1 = String("hello ");
@@ -76,8 +76,8 @@ func TestGen(t *testing.T) {
 				}
 				let a = add(1, 3);`,
 			res: `
-				#include <string>
 				#include <iostream>
+				#include <string>
 				#include "Builtins.cpp"
 				Int add(Int y, Int x) {
 					Int tmp_1 = x.PLUS(y);
@@ -99,8 +99,8 @@ func TestGen(t *testing.T) {
 					x = 6;
 				}`,
 			res: `
-				#include <string>
 				#include <iostream>
+				#include <string>
 				#include "Builtins.cpp"
 				int main() {
 				Int tmp_1 = Int(0);
@@ -118,7 +118,7 @@ func TestGen(t *testing.T) {
 	for i, test := range tests {
 		program := Parse(test.src)
 		TypeCheck(program)
-		code := gen.GenWrapper(program)
+		code := codegen.GenWrapper(program)
 		codeString := code.String()
 		// remove spaces for comparison
 		for _, rep := range []string{" ", "\n", "\t"} {
@@ -127,7 +127,7 @@ func TestGen(t *testing.T) {
 		}
 
 		if codeString != test.res {
-			t.Log(codeString)
+			t.Log(codeString, test.res)
 			t.Fatalf("test [%d] failed", i)
 		}
 	}
@@ -175,7 +175,7 @@ func TestOutPut(t *testing.T) {
 	for i, test := range tests {
 		program := Parse(test.src)
 		TypeCheck(program)
-		code := gen.GenWrapper(program)
+		code := codegen.GenWrapper(program)
 		output := Compile(code)
 
 		for _, rep := range []string{" ", "\n", "\t"} {
@@ -183,7 +183,8 @@ func TestOutPut(t *testing.T) {
 		}
 
 		if output != test.out {
-			t.Fatalf("test [%d] failed wanted '%s', got='%s'", i, test.out, output)
+			t.Fatalf("test [%d] failed wanted '%s', got='%s'", i, test.out,
+				output)
 		}
 	}
 }

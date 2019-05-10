@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/aniketp/meego/ast"
-	"github.com/aniketp/meego/checker"
+	"github.com/aniketp/meego/src/ast"
+	"github.com/aniketp/meego/src/checker"
 )
 
 func GenWrapper(p *ast.Program) bytes.Buffer {
@@ -180,11 +180,14 @@ func genInfixExpression(node *ast.InfixExpression, b *bytes.Buffer) string {
 	kind := node.Type
 
 	tmp := freshTemp()
-	methods := map[string]string{"+": checker.PLUS, "-": checker.MINUS, "==": checker.EQUAL,
-		"<": checker.LT, ">": checker.GT, "*": checker.TIMES, "/": checker.DIVIDE, "or": checker.OR, "and": checker.AND}
+	methods := map[string]string{"+": checker.PLUS, "-": checker.MINUS,
+		"==": checker.EQUAL, "<": checker.LT, ">": checker.GT,
+		"*": checker.TIMES, "/": checker.DIVIDE, "or": checker.OR,
+		"and": checker.AND}
 
 	method, _ := checker.GetMethod(kind, methods[node.Operator])
-	write(b, "%s %s = %s.%s(%s);\n", method.Return, tmp, left, methods[node.Operator], right)
+	write(b, "%s %s = %s.%s(%s);\n", method.Return, tmp, left,
+		methods[node.Operator], right)
 	return tmp
 }
 

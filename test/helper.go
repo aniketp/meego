@@ -37,15 +37,15 @@ func TypeCheck(program *ast.Program) {
 }
 
 func Compile(code bytes.Buffer) string {
-	f, err := os.Create("../template/main.cpp")
+	f, err := os.Create("../input/main.cpp")
 	check(err)
 	defer f.Close()
 
 	f.Write(code.Bytes())
 
 	var out bytes.Buffer
-	cmd1 := exec.Command("g++", "-std=c++11", "-o", "apple", "../template/main.cpp",
-		"../template/Builtins.cpp")
+	cmd1 := exec.Command("g++", "-o", "apple", "../input/main.cpp",
+		"../input/Builtins.cpp")
 	cmd1.Stderr = &out
 	err = cmd1.Run()
 

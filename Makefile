@@ -1,7 +1,7 @@
 GOCMD=go
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
-GENERATOR=grammer.bnf
+GENERATOR=lang.bnf
 GENERATE=../../../../../bin/gocc
 
 
@@ -16,5 +16,8 @@ clean:
 	rm -rf src/util src/token src/lexer src/parser src/errors
 run:
 	cd src; \
-	$(GENERATE) $(GENERATOR) # create lexer and parser
+	$(GENERATE) $(GENERATOR)
 	cd ..;
+
+deps:
+	go get github.com/goccmack/gocc

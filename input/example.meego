@@ -3,10 +3,10 @@ func add(a Int, b Int) Int {
 }
 
 func hello(name String) String {
-    return "hello" + " " + name;
+    return "Requiescat in pace, " + name + "!";
 }
 
-let num = add(1, 2);
-let phrase = hello("Jeff");
-PRINT(phrase);
-PRINT(num);
+let result = add(2, 3);
+let ac = hello("Ezio");
+PRINT(result);
+PRINT(ac);

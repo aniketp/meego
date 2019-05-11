@@ -3,7 +3,7 @@ func add(a Int, b Int) Int {
 }
 
 func hello(name String) String {
-    return "Requiescat in pace, " + name + "!";
+    return "Requiescat in pace " + name + "!";
 }
 
 let result = add(2, 3);

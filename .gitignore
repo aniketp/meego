@@ -10,4 +10,4 @@ token/
 
 # Generated Binary and source
 apple
-template/main.cpp
+input/main.cpp

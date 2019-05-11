@@ -44,7 +44,7 @@ func Compile(code bytes.Buffer) string {
 	f.Write(code.Bytes())
 
 	var out bytes.Buffer
-	cmd1 := exec.Command("g++", "-o", "apple", "../input/main.cpp",
+	cmd1 := exec.Command("g++", "-std=c++11", "-o", "apple", "../input/main.cpp",
 		"../input/Builtins.cpp")
 	cmd1.Stderr = &out
 	err = cmd1.Run()
